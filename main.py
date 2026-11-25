@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Write one childhood memory to /output/entry.txt.
 
-The entry is a single sentence, at most 280 characters, recalling a
+The entry is a single sentence, at most MAX_CHARS characters, recalling a
 rainy evening in a grandmother's kitchen: steam fogging her glasses,
 a child on a stool stealing pieces of yam while she pretends not to
 notice. Stdlib only, no network, no clock, no randomness: the same
@@ -10,6 +10,10 @@ bytes on every run.
 
 import os
 import sys
+
+# The bounty caps the entry at 280 characters; keep the cap in one place
+# so the guard below and the docstring above can never drift apart.
+MAX_CHARS = 280
 
 ENTRY = (
     "Every rainy evening my grandmother would lift the pot lid just enough "
@@ -20,8 +24,11 @@ ENTRY = (
 
 def main() -> int:
     text = ENTRY
-    if not 1 <= len(text) <= 280:
-        print(f"entry must be 1-280 characters, got {len(text)}", file=sys.stderr)
+    if not 1 <= len(text) <= MAX_CHARS:
+        print(
+            f"entry must be 1-{MAX_CHARS} characters, got {len(text)}",
+            file=sys.stderr,
+        )
         return 1
     if text.strip() == "" or "\n" in text or "\r" in text:
         print("entry must be a single non-blank line", file=sys.stderr)
